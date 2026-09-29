@@ -1,0 +1,60 @@
+{
+  "name": "@akshatagarwl/pi-codex-auth",
+  "version": "0.1.0",
+  "description": "Current OpenAI Codex (ChatGPT subscription) access token from Pi's own login, refreshed under Pi's auth.json lock so it never fights the pi CLI.",
+  "license": "MIT",
+  "author": "Akshat Agarwal",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akshatagarwl/pi-codex-auth.git"
+  },
+  "keywords": [
+    "pi",
+    "pi-ai",
+    "openai-codex",
+    "chatgpt",
+    "oauth",
+    "effect",
+    "flue"
+  ],
+  "files": [
+    "dist",
+    "src"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "engines": {
+    "node": ">=24.18.0"
+  },
+  "packageManager": "pnpm@11.3.0",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest run",
+    "check": "pnpm typecheck && pnpm test && pnpm build",
+    "prepare": "effect-tsgo patch && pnpm build"
+  },
+  "dependencies": {
+    "proper-lockfile": "4.1.2"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-ai": ">=0.81.0 <1",
+    "effect": ">=4.0.0-rc.117 <5"
+  },
+  "devDependencies": {
+    "@earendil-works/pi-ai": "0.81.1",
+    "@effect/platform-node": "4.0.0-rc.117",
+    "@effect/tsgo": "0.45.0",
+    "@effect/vitest": "4.0.0-rc.117",
+    "@types/node": "24.13.6",
+    "@types/proper-lockfile": "4.1.4",
+    "effect": "4.0.0-rc.117",
+    "typescript": "7.0.2",
+    "vitest": "5.0.1"
+  }
+}
