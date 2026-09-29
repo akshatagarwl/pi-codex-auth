@@ -87,11 +87,13 @@ export const writeAuthFile = Effect.fn("writeAuthFile")(function* writeAuthFile(
   const fileSystem = yield* FileSystem.FileSystem;
 
   yield* fileSystem
-    .writeFileString(file, JSON.stringify(contents, null, 2), {
-      mode: OWNER_ONLY,
-    })
+    .chmod(file, OWNER_ONLY)
     .pipe(
-      Effect.andThen(fileSystem.chmod(file, OWNER_ONLY)),
+      Effect.andThen(
+        fileSystem.writeFileString(file, JSON.stringify(contents, null, 2), {
+          mode: OWNER_ONLY,
+        })
+      ),
       Effect.mapError(
         (failure) => new PiAuthFileInvalid({ file, reason: failure.message })
       )

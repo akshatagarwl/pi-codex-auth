@@ -12,6 +12,14 @@ Pi's CLI stores and refreshes OAuth credentials in `~/.pi/agent/auth.json`, but 
 - **Refresh token stays put:** only the access token is returned. Refresh happens when fewer than 5 minutes remain, through `pi-ai`'s own `openai-codex` OAuth provider.
 - **Typed failures:** `PiCodexNotLoggedIn`, `PiAuthFileInvalid`, `PiAuthLockFailed`, `PiCodexRefreshFailed`.
 
+## Security
+
+- The refresh token never leaves `auth.json`; callers only ever receive the access token.
+- Before new tokens are written, `auth.json` is `chmod`ed to `0600`.
+- Refresh is bounded at 15 s (pi-ai's refresh ignores abort signals), and the lock is re-checked before writing.
+- Error reasons built from foreign errors redact token-like strings, because pi-ai can echo a token response in its error text.
+- Trust boundary: like Pi, this follows symlinks at `auth.json` and trusts `PI_CODING_AGENT_DIR`. Anything that can set your environment or write your home directory already has your login.
+
 ## Use
 
 Log in once with Pi: run `pi`, then `/login`, and pick OpenAI Codex.

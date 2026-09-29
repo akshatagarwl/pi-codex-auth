@@ -34,10 +34,11 @@
   "packageManager": "pnpm@11.3.0",
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "build": "tsc -p tsconfig.build.json",
+    "build": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\" && tsc -p tsconfig.build.json",
     "test": "vitest run",
     "check": "pnpm typecheck && pnpm test && pnpm build",
-    "prepare": "effect-tsgo patch && pnpm build"
+    "prepare": "effect-tsgo patch && pnpm build",
+    "prepublishOnly": "pnpm check"
   },
   "dependencies": {
     "proper-lockfile": "4.1.2"
@@ -56,5 +57,8 @@
     "effect": "4.0.0-rc.117",
     "typescript": "7.0.2",
     "vitest": "5.0.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

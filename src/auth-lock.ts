@@ -2,6 +2,7 @@ import { Effect, Predicate, Schedule } from "effect";
 import lockfile from "proper-lockfile";
 
 import { PiAuthLockFailed } from "./errors.js";
+import { redactedReason } from "./redact.js";
 
 const PI_LOCK_STALE_MILLIS = 30_000;
 
@@ -19,7 +20,7 @@ const acquire = (file: string, compromised: { cause?: unknown }) =>
       new PiAuthLockFailed({
         file,
         held: isHeldByAnother(cause),
-        reason: String(cause),
+        reason: redactedReason(cause),
       }),
     // oxlint-disable-next-line typescript/promise-function-async -- proper-lockfile returns the release function through a Promise.
     try: () =>
@@ -45,22 +46,23 @@ const failIfCompromised = (file: string, compromised: { cause?: unknown }) =>
         new PiAuthLockFailed({
           file,
           held: false,
-          reason: `lock compromised: ${String(compromised.cause)}`,
+          reason: `lock compromised: ${redactedReason(compromised.cause)}`,
         })
       );
 
 export const withPiAuthLock = <A, E, R>(
   file: string,
-  work: Effect.Effect<A, E, R>
+  work: (stillHeld: Effect.Effect<void, PiAuthLockFailed>) => Effect.Effect<A, E, R>
 ) =>
   Effect.gen(function* underPiAuthLock() {
     const compromised: { cause?: unknown } = {};
     yield* Effect.acquireRelease(acquire(file, compromised), (release) =>
       Effect.promise(() => release()).pipe(Effect.ignore)
     );
-    yield* failIfCompromised(file, compromised);
-    const result = yield* work;
-    yield* failIfCompromised(file, compromised);
+    const stillHeld = failIfCompromised(file, compromised);
+    yield* stillHeld;
+    const result = yield* work(stillHeld);
+    yield* stillHeld;
 
     return result;
   }).pipe(Effect.scoped);

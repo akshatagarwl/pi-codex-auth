@@ -36,8 +36,7 @@ export class PiCodexAuth extends Context.Service<
       Effect.provideService(FileSystem.FileSystem, fileSystem)
     );
 
-    const refreshUnderLock = withPiAuthLock(
-      file,
+    const refreshUnderLock = withPiAuthLock(file, (stillHeld) =>
       Effect.gen(function* refreshUnderLock() {
         const contents = yield* readAuthFile(file);
         const credential = yield* codexCredentialIn(file, contents);
@@ -47,6 +46,7 @@ export class PiCodexAuth extends Context.Service<
         }
 
         const refreshed = yield* refresher.refresh(credential);
+        yield* stillHeld;
         yield* writeAuthFile(file, {
           ...contents,
           [CODEX_PROVIDER_ID]: refreshed,
