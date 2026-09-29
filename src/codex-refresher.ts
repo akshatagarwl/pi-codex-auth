@@ -17,7 +17,7 @@ export class CodexTokenRefresher extends Context.Service<
       credential: CodexCredential
     ) => Effect.Effect<CodexCredential, PiCodexRefreshFailed>;
   }
->()("@akshatagarwl/pi-codex-auth/CodexTokenRefresher", {
+>()("@akshatag/pi-codex-auth/CodexTokenRefresher", {
   make: Effect.gen(function* makeCodexTokenRefresher() {
     const oauth = openaiCodexProvider().auth?.oauth;
 

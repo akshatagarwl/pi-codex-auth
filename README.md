@@ -1,4 +1,4 @@
-# @akshatagarwl/pi-codex-auth
+# @akshatag/pi-codex-auth
 
 A current OpenAI Codex (ChatGPT subscription) access token from [Pi](https://pi.dev)'s own login, for code that embeds `pi-ai` without the Pi CLI, such as a [Flue](https://flueframework.com) agent.
 
@@ -25,12 +25,12 @@ Pi's CLI stores and refreshes OAuth credentials in `~/.pi/agent/auth.json`, but 
 Log in once with Pi: run `pi`, then `/login`, and pick OpenAI Codex.
 
 ```sh
-pnpm add github:akshatagarwl/pi-codex-auth effect @earendil-works/pi-ai
+pnpm add @akshatag/pi-codex-auth effect @earendil-works/pi-ai
 ```
 
 ```ts
 import { NodeServices } from "@effect/platform-node";
-import { PiCodexAuth } from "@akshatagarwl/pi-codex-auth";
+import { PiCodexAuth } from "@akshatag/pi-codex-auth";
 import { Effect, Layer, ManagedRuntime } from "effect";
 
 const runtime = ManagedRuntime.make(

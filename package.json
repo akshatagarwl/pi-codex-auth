@@ -1,5 +1,5 @@
 {
-  "name": "@akshatagarwl/pi-codex-auth",
+  "name": "@akshatag/pi-codex-auth",
   "version": "0.1.0",
   "description": "Current OpenAI Codex (ChatGPT subscription) access token from Pi's own login, refreshed under Pi's auth.json lock so it never fights the pi CLI.",
   "license": "MIT",

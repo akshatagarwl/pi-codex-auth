@@ -25,7 +25,7 @@ export class PiCodexAuth extends Context.Service<
     readonly file: string;
     readonly accessToken: Effect.Effect<string, PiCodexAuthError>;
   }
->()("@akshatagarwl/pi-codex-auth/PiCodexAuth", {
+>()("@akshatag/pi-codex-auth/PiCodexAuth", {
   make: Effect.gen(function* makePiCodexAuth() {
     const fileSystem = yield* FileSystem.FileSystem;
     const refresher = yield* CodexTokenRefresher;
